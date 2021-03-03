@@ -1,7 +1,7 @@
 pipeline {
   agent {
     node {
-      label 'maven'
+      label 'nodejs'
     }
   }
 
@@ -29,7 +29,7 @@ pipeline {
  
         stage ('build & push') {
             steps {
-                container ('maven') {
+                container ('nodejs') {
                     sh 'npm install'
                     sh 'docker build -f Dockerfile-online -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
                     withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
@@ -45,7 +45,7 @@ pipeline {
              branch 'master'
            }
            steps{
-                container ('maven') {
+                container ('nodejs') {
                   sh 'docker tag  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
                   sh 'docker push  $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:latest '
                 }
