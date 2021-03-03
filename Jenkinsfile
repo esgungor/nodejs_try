@@ -30,7 +30,7 @@ pipeline {
         stage ('build & push') {
             steps {
                 container ('nodejs') {
-                    nodejs(nodeJSInstallationName: 'nodejs')
+                    
                     sh 'npm install'
                     sh 'docker build -f Dockerfile-online -t $REGISTRY/$DOCKERHUB_NAMESPACE/$APP_NAME:SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER .'
                     withCredentials([usernamePassword(passwordVariable : 'DOCKER_PASSWORD' ,usernameVariable : 'DOCKER_USERNAME' ,credentialsId : "$DOCKER_CREDENTIAL_ID" ,)]) {
